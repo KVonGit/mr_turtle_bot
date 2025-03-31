@@ -244,7 +244,7 @@ function monitorComments() {
 
           const turtleRegExp2 = /(turtle(.*)?knocked\W*over\W*((the|a|that|)\W*)?candle\b)|(turtle(.*)?knocked\W*((the|a|that|)\W*)?candle\W*over\b)/i;
           const turtleMatch2 = comment.body.match(turtleRegExp2);
-          if (turtleMatch2 && !previouslySeenComments.has(comment.id) {
+          if (turtleMatch2 && !previouslySeenComments.has(comment.id)) {
             console.log(`🐢 [monitorSubreddits ${new Date().toLocaleString()}]: Found matching comment: "${comment.body}"`);
             
             // Take action - reply to the comment
