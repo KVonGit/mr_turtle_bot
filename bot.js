@@ -21,6 +21,161 @@ const SUBREDDIT = 'MrTurtleBot_Prototype';
 const SHOW_ID = '678';
 const STATE_FILE = path.join(__dirname, 'episodeState.json');
 
+// Add this near your other constants
+const WATCH_SUBREDDITS = ['MrTurtleBot_Prototype']; // Add more subreddits as needed
+const KEYWORDS = ['earl', 'karma', 'list', 'crabman']; // Keywords to watch for
+
+// Function to check if a string contains any of the keywords
+function containsKeywords(text) {
+  if (!text) return false;
+  const lowerText = text.toLowerCase();
+  return KEYWORDS.some(keyword => lowerText.includes(keyword.toLowerCase()));
+}
+
+// Function to monitor new submissions in specified subreddits
+function monitorSubreddits() {
+  console.log(`Starting to monitor r/${WATCH_SUBREDDITS.join(', ')} for new posts...`);
+  
+  // Track the last check time
+  let lastCheckTime = Date.now();
+  
+  // Poll for new submissions every 30 seconds
+  setInterval(async () => {
+    try {
+      // Get the latest posts directly
+      const subreddit = r.getSubreddit(WATCH_SUBREDDITS.join('+'));
+      const latestPosts = await subreddit.getNew({limit: 10});
+      
+      const currentTime = Date.now();
+      
+      for (const post of latestPosts) {
+        const postCreated = post.created_utc * 1000; // Convert to milliseconds
+        
+        // Only process posts created since our last check
+        if (postCreated > lastCheckTime) {
+          // Find which keyword(s) matched
+          const matchedKeywords = findMatchedKeywords(post.title, post.selftext);
+          
+          if (matchedKeywords.length > 0) {
+            console.log(`Found matching post: "${post.title}" with keywords: ${matchedKeywords.join(', ')}`);
+            
+            // Take action - pass the first matched keyword (or all of them)
+            await respondToPost(post, matchedKeywords);
+          }
+        }
+      }
+      
+      // Update the last check time
+      lastCheckTime = currentTime;
+      
+    } catch (error) {
+      console.error('Error monitoring subreddits:', error);
+    }
+  }, 30000); // Check every 30 seconds
+}
+
+// New function to find all matched keywords
+function findMatchedKeywords(title, selftext) {
+  const matchedKeywords = [];
+  const titleLower = title ? title.toLowerCase() : '';
+  const textLower = selftext ? selftext.toLowerCase() : '';
+  
+  KEYWORDS.forEach(keyword => {
+    const keywordLower = keyword.toLowerCase();
+    if (titleLower.includes(keywordLower) || textLower.includes(keywordLower)) {
+      matchedKeywords.push(keyword);
+    }
+  });
+  
+  return matchedKeywords;
+}
+
+// Updated function to respond to posts that match our criteria
+async function respondToPost(post, matchedKeywords) {
+  try {
+    // Customize reply based on the matched keywords
+    let keywordMention = '';
+    
+    if (matchedKeywords.length === 1) {
+      keywordMention = `you mentioned "${matchedKeywords[0]}"`;
+    } else {
+      const lastKeyword = matchedKeywords.pop();
+      keywordMention = `you mentioned ${matchedKeywords.join(', ')} and ${lastKeyword}`;
+    }
+    
+    const reply = `Hello! I noticed ${keywordMention}. I'm Mr. Turtle, a bot that helps with our My Name Is Earl 20th anniversary discussion series!`;
+    
+    await post.reply(reply);
+    console.log(`Replied to post: "${post.title}"`);
+  } catch (error) {
+    console.error('Error responding to post:', error);
+  }
+}
+
+// Function to monitor comments in specified subreddits
+function monitorComments() {
+  console.log(`Starting to monitor comments in r/${WATCH_SUBREDDITS.join(', ')}...`);
+  
+  // Track the last check time for comments
+  let lastCommentCheckTime = Date.now();
+  
+  // Poll for new comments every 30 seconds
+  setInterval(async () => {
+    try {
+      // Get the latest comments directly
+      const subreddit = r.getSubreddit(WATCH_SUBREDDITS.join('+'));
+      const latestComments = await subreddit.getNewComments({limit: 25});
+      
+      const currentTime = Date.now();
+      
+      for (const comment of latestComments) {
+        const commentCreated = comment.created_utc * 1000; // Convert to milliseconds
+        
+        // Only process comments created since our last check
+        if (commentCreated > lastCommentCheckTime) {
+          // Check for keywords in comment body
+          const matchedKeywords = findMatchedKeywords('', comment.body);
+          
+          if (matchedKeywords.length > 0) {
+            console.log(`Found matching comment: "${comment.body.substring(0, 50)}..." with keywords: ${matchedKeywords.join(', ')}`);
+            
+            // Take action - reply to the comment
+            await respondToComment(comment, matchedKeywords);
+          }
+        }
+      }
+      
+      // Update the last check time
+      lastCommentCheckTime = currentTime;
+      
+    } catch (error) {
+      console.error('Error monitoring comments:', error);
+    }
+  }, 30000); // Check every 30 seconds
+}
+
+// Function to respond to comments that match our criteria
+async function respondToComment(comment, matchedKeywords) {
+  try {
+    // Customize reply based on the matched keywords
+    let keywordMention = '';
+    
+    if (matchedKeywords.length === 1) {
+      keywordMention = `you mentioned "${matchedKeywords[0]}"`;
+    } else {
+      const lastKeyword = matchedKeywords.pop();
+      keywordMention = `you mentioned ${matchedKeywords.join(', ')} and ${lastKeyword}`;
+    }
+    
+    const reply = `Hello! I noticed ${keywordMention} in your comment. I'm Mr. Turtle, a bot that helps with our My Name Is Earl 20th anniversary discussion series. Be on the lookout for our “watch-a-long”, starting in September!`;
+    
+    await comment.reply(reply);
+    console.log(`Replied to comment by u/${comment.author.name}`);
+  } catch (error) {
+    console.error('Error responding to comment:', error);
+  }
+}
+
 // Function to read the current state
 function readState() {
   try {
@@ -138,6 +293,10 @@ console.log('MrTurtleBot is running...');
 // Uncomment these lines to test/manually control the bot
 // setStartingPoint(1, 0);  // Set starting point (will post S1E1 next)
 // postNextEpisode();       // Post immediately instead of waiting for schedule
+
+// Start both monitoring functions
+monitorSubreddits();
+monitorComments();
 
 /**
  * ## How to use this script:
