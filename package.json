@@ -3,5 +3,24 @@
     "axios": "^1.8.4",
     "node-cron": "^3.0.3",
     "snoowrap": "^1.23.0"
-  }
+  },
+  "name": "mr_turtle_bot",
+  "version": "1.0.0",
+  "description": "reddit bot",
+  "main": "bot.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KVonGit/mr_turtle_bot.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/KVonGit/mr_turtle_bot/issues"
+  },
+  "homepage": "https://github.com/KVonGit/mr_turtle_bot#readme"
 }

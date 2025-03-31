@@ -49,7 +49,16 @@ function saveState(season, episode) {
   }
 }
 
-// Function to post the next episode
+// Function to format date to MM-DD-YYYY
+function formatDate(dateString) {
+  const date = new Date(dateString);
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+  const year = date.getFullYear();
+  return `${month}-${day}-${year}`;
+}
+
+// Modified Reddit posting code
 async function postNextEpisode() {
   try {
     // Read the current state
@@ -83,7 +92,7 @@ async function postNextEpisode() {
 
 ## S${nextEpisode.season}E${nextEpisode.number}: ${nextEpisode.name}
 
-📅 **Original Air Date:** ${nextEpisode.airdate}
+📅 **Original Air Date:** ${formatDate(nextEpisode.airdate)}
 
 📝 **Summary:** ${nextEpisode.summary.replace(/<\/?[^>]+(>|$)/g, "")}
 
@@ -92,9 +101,17 @@ async function postNextEpisode() {
 *This is part of our weekly episode discussion series for the show's 20th anniversary.*
 `;
 
-    // Post to Reddit
-    await r.getSubreddit(SUBREDDIT).submitSelfpost({ title, text: body });
+    // Post to Reddit and capture the submission object
+    const submission = await r.getSubreddit(SUBREDDIT).submitSelfpost({ title, text: body });
     console.log(`Posted to r/${SUBREDDIT}: ${title}`);
+
+    // Try to pin the post, but handle errors gracefully
+    try {
+      await submission.sticky({ num: 1 });
+      console.log('Post has been pinned to the top of the subreddit');
+    } catch (pinError) {
+      console.log('Note: Could not pin post - bot account needs moderator permissions');
+    }
     
     // Update the state with the episode we just posted
     saveState(nextEpisode.season, nextEpisode.number);
@@ -111,10 +128,12 @@ function setStartingPoint(season, episode) {
 }
 
 // Schedule weekly posts (e.g., every Monday at 9:00 AM)
-cron.schedule('0 9 * * 1', () => {
-  console.log('Running scheduled episode post...');
+cron.schedule('29 19 * * 7', () => {
+  console.log('Running scheduled episode post...' + new Date().toLocaleString());
   postNextEpisode();
 });
+
+console.log('MrTurtleBot is running...');
 
 // Uncomment these lines to test/manually control the bot
 // setStartingPoint(1, 0);  // Set starting point (will post S1E1 next)
