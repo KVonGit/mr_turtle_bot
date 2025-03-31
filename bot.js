@@ -23,7 +23,7 @@ const STATE_FILE = path.join(__dirname, 'episodeState.json');
 
 // Add this near your other constants
 const WATCH_SUBREDDITS = ['MrTurtleBot_Prototype']; // Add more subreddits as needed
-const KEYWORDS = ['earl', 'karma', 'list', 'crabman', 'good bot']; // Keywords to watch for
+const KEYWORDS = ['earl', 'karma', 'list', 'crabman']; // Keywords to watch for
 
 // Function to check if a string contains any of the keywords
 function containsKeywords(text) {
@@ -133,6 +133,11 @@ function monitorComments() {
         
         // Only process comments created since our last check
         if (commentCreated > lastCommentCheckTime) {
+
+          if (comment.body == 'good bot') {
+            await respondToComment(comment, ['good bot']);
+            return;
+          }
           // Check for keywords in comment body
           const matchedKeywords = findMatchedKeywords('', comment.body);
           
