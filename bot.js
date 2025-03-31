@@ -102,7 +102,7 @@ function monitorSubreddits() {
           // Find which keyword(s) matched
           const turtleRegExp = /(turtle(.*)?knocked\W*over\W*((the|a|that|)\W*)?candle\b)|(turtle(.*)?knocked\W*((the|a|that|)\W*)?candle\W*over\b)/i;
           const turtleMatch = post.title.match(turtleRegExp);
-          if (turtleMatch) {
+          if (turtleMatch && !previouslySeenPosts.has(post.id)) {
             console.log(`🐢 [monitorSubreddits ${new Date().toLocaleString()}]: Found matching post: "${post.title}"`);
             
             console.log(`🐢 [monitorSubreddits: ${new Date().toLocaleString()}]: Replied to post by u/${post.author.name}\nDodge definitely knocked over that candle.`);
@@ -244,15 +244,17 @@ function monitorComments() {
 
           const turtleRegExp2 = /(turtle(.*)?knocked\W*over\W*((the|a|that|)\W*)?candle\b)|(turtle(.*)?knocked\W*((the|a|that|)\W*)?candle\W*over\b)/i;
           const turtleMatch2 = comment.body.match(turtleRegExp2);
-          if (turtleMatch2) {
+          if (turtleMatch2 && !previouslySeenComments.has(comment.id) {
             console.log(`🐢 [monitorSubreddits ${new Date().toLocaleString()}]: Found matching comment: "${comment.body}"`);
             
             // Take action - reply to the comment
             console.log(`🐢 [monitorComments: ${new Date().toLocaleString()}]: Replied to comment by u/${comment.author.name}\nDodge definitely knocked over that candle.`);
+            if (!previouslySeenComments.has(comment.id)) {
             // Mark as seen
             previouslySeenComments.add(comment.id);
             saveSeenContent(previouslySeenPosts, previouslySeenComments);
             return comment.reply(`Dodge definitely knocked over that candle.`);
+            }
           }
 
           // Check for keywords in comment body
