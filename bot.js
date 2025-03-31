@@ -106,6 +106,9 @@ function monitorSubreddits() {
             console.log(`🐢 [monitorSubreddits ${new Date().toLocaleString()}]: Found matching post: "${post.title}"`);
             
             console.log(`🐢 [monitorSubreddits: ${new Date().toLocaleString()}]: Replied to post by u/${post.author.name}\nDodge definitely knocked over that candle.`);
+             // Mark as seen
+             previouslySeenPosts.add(post.id);
+             saveSeenContent(previouslySeenPosts, previouslySeenComments);
             return post.reply(`Dodge definitely knocked over that candle.`);
           }
           const matchedKeywords = findMatchedKeywords(post.title, post.selftext);
@@ -246,6 +249,9 @@ function monitorComments() {
             
             // Take action - reply to the comment
             console.log(`🐢 [monitorComments: ${new Date().toLocaleString()}]: Replied to comment by u/${comment.author.name}\nDodge definitely knocked over that candle.`);
+            // Mark as seen
+            previouslySeenComments.add(comment.id);
+            saveSeenContent(previouslySeenPosts, previouslySeenComments);
             return comment.reply(`Dodge definitely knocked over that candle.`);
           }
 
@@ -297,8 +303,8 @@ async function respondToComment(comment, matchedKeywords) {
 
     let reply = `Hello! I noticed ${keywordMention}! Nice!`;
 
-    if (comment.body.match(/^hey(,|) crabman('|)s turtle\b/i)) {
-      reply = `Hey, Earl.`;
+    if (comment.body.match(/^hey(,|) crabman('|)s turtle\b$/i)) {
+      reply = `Hey Earl.`;
       console.log(`🐢 [respondToComment: ${new Date().toLocaleString()}]: Replied to comment by u/${comment.author.name}\n${reply}`);
       return comment.reply(reply);
     }
