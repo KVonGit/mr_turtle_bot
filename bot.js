@@ -23,7 +23,7 @@ const STATE_FILE = path.join(__dirname, 'episodeState.json');
 
 // Add this near your other constants
 const WATCH_SUBREDDITS = ['MrTurtleBot_Prototype']; // Add more subreddits as needed
-const KEYWORDS = ['earl', 'karma', 'list', 'crabman']; // Keywords to watch for
+const KEYWORDS = ['earl', 'karma', 'list', 'crabman', 'good bot', '20th', 'twentieth', 'anniversary']; // Keywords to watch for
 
 // Function to check if a string contains any of the keywords
 function containsKeywords(text) {
@@ -49,6 +49,10 @@ function monitorSubreddits() {
       const currentTime = Date.now();
       
       for (const post of latestPosts) {
+        if (post.author.name === 'MrTurtleBot') continue; // Ignore own posts
+        if (post.author.name === 'AutoModerator') continue; // Ignore AutoModerator posts
+        if (post.title.includes('removed')) continue; // Ignore removed posts
+        if (post.title.includes('deleted')) continue; // Ignore deleted posts
         const postCreated = post.created_utc * 1000; // Convert to milliseconds
         
         // Only process posts created since our last check
@@ -102,9 +106,25 @@ async function respondToPost(post, matchedKeywords) {
       const lastKeyword = matchedKeywords.pop();
       keywordMention = `you mentioned ${matchedKeywords.join(', ')} and ${lastKeyword}`;
     }
-    
-    const reply = `Hello! I noticed ${keywordMention}. I'm Mr. Turtle, a bot that helps with our My Name Is Earl 20th anniversary discussion series!`;
-    
+
+    let reply = `Hello! I noticed ${keywordMention}! Nice!`;
+
+    if (matchedKeywords === '20th' || matchedKeywords === 'twentieth' || matchedKeywords === 'anniversary') {
+      reply = `Hello! I noticed ${keywordMention}! I'm Mr. Turtle, a bot that helps with our My Name Is Earl 20th anniversary discussion series!`;
+    }
+    else if (matchedKeywords === 'earl') {
+      reply = 'Earl is a great character! Do you have a favorite episode?';
+    }
+    else if (matchedKeywords === 'karma') {
+      reply = 'Karma is a central theme in the show! What are your thoughts on it?';
+    }
+    else if (matchedKeywords === 'list') {
+      reply = 'The list is iconic! What’s your favorite item on it?';
+    }
+    else if (matchedKeywords === 'crabman') {
+      reply = 'Crabman is a fan-favorite! Do you have a favorite moment with him?';
+    }
+
     await post.reply(reply);
     console.log(`Replied to post: "${post.title}"`);
   } catch (error) {
@@ -129,15 +149,16 @@ function monitorComments() {
       const currentTime = Date.now();
       
       for (const comment of latestComments) {
+        if (comment.author.name === 'MrTurtleBot') continue; // Ignore own comments
+        if (comment.author.name === 'AutoModerator') continue; // Ignore AutoModerator comments
+        if (comment.body.includes('removed')) continue; // Ignore removed comments
+        if (comment.body.includes('deleted')) continue; // Ignore deleted comments
         const commentCreated = comment.created_utc * 1000; // Convert to milliseconds
         
         // Only process comments created since our last check
         if (commentCreated > lastCommentCheckTime) {
+          console.log('comment.body', comment.body);
 
-          if (comment.body.includes('good bot')) {
-            await respondToComment(comment, ['good bot']);
-            return;
-          }
           // Check for keywords in comment body
           const matchedKeywords = findMatchedKeywords('', comment.body);
           
@@ -159,6 +180,8 @@ function monitorComments() {
   }, 30000); // Check every 30 seconds
 }
 
+// TODO: Do not do the general reply. Just respond to certain complete messages.
+
 // Function to respond to comments that match our criteria
 async function respondToComment(comment, matchedKeywords) {
   try {
@@ -171,8 +194,30 @@ async function respondToComment(comment, matchedKeywords) {
       const lastKeyword = matchedKeywords.pop();
       keywordMention = `you mentioned ${matchedKeywords.join(', ')} and ${lastKeyword}`;
     }
-    
-    const reply = `Hello! I noticed ${keywordMention} in your comment. I'm Mr. Turtle, a bot that helps with our My Name Is Earl 20th anniversary discussion series. Be on the lookout for our “watch-a-long”, starting in September!`;
+
+    let reply = `Hello! I noticed ${keywordMention}! Nice!`;
+
+    if (comment.body.match(/^hey(,|) crabman('|)s turtle\b/i)) {
+      reply = `Hey, Earl.`;
+    }
+    else if (comment.body.match(/good bot/i)) {
+      reply = 'Thanks! Got any arugula?';
+    }
+    else if (matchedKeywords === '20th' || matchedKeywords === 'twentieth' || matchedKeywords === 'anniversary') {
+      reply = `Hello! I noticed ${keywordMention}! I'm Mr. Turtle, a bot that helps with our My Name Is Earl 20th anniversary discussion series!`;
+    }
+    else if (matchedKeywords === 'earl') {
+      reply = 'Earl is a great character! Do you have a favorite episode?';
+    }
+    else if (matchedKeywords === 'karma') {
+      reply = 'Karma is a central theme in the show! What are your thoughts on it?';
+    }
+    else if (matchedKeywords === 'list') {
+      reply = 'The list is iconic! What’s your favorite item on it?';
+    }
+    else if (matchedKeywords === 'crabman') {
+      reply = 'Crabman is a fan-favorite! Do you have a favorite moment with him?';
+    }
     
     await comment.reply(reply);
     console.log(`Replied to comment by u/${comment.author.name}`);
