@@ -134,7 +134,7 @@ function monitorComments() {
         // Only process comments created since our last check
         if (commentCreated > lastCommentCheckTime) {
 
-          if (comment.body == 'good bot') {
+          if (comment.body.includes('good bot')) {
             await respondToComment(comment, ['good bot']);
             return;
           }
