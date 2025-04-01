@@ -82,7 +82,7 @@ function monitorSubreddits() {
   
   // Poll for new submissions every 30 seconds
   setInterval(async () => {
-    console.log('🐢 Checking for new posts...');
+    console.log('🐢 ' + new Date().toLocaleString() + ': Checking for new posts...');
     try {
       // Get the latest posts directly
       const subreddit = r.getSubreddit(WATCH_SUBREDDITS.join('+'));
@@ -214,7 +214,7 @@ function monitorComments() {
   
   // Poll for new comments every 30 seconds
   setInterval(async () => {
-    console.log('🐢 Checking for new comments...');
+    console.log('🐢 ' + new Date().toLocaleString() + ': Checking for new comments...');
     try {
       // Get the latest comments directly
       const subreddit = r.getSubreddit(WATCH_SUBREDDITS.join('+'));
@@ -235,16 +235,16 @@ function monitorComments() {
         // Only process comments created since our last check
         if (commentCreated > lastCommentCheckTime) {
           
-        console.log('🐢 comment.author.name', comment.author.name);
-        console.log('🐢 comment.id', comment.id);
-        console.log('🐢 comment.body', comment.body);
+        console.log('🐢 comment.author.name:', comment.author.name);
+        console.log('🐢 comment.id:', comment.id);
+        console.log('🐢 comment.body:', comment.body);
         console.log('🐢------------------------');
         console.log('🐢 utc', new Date().toLocaleString())
         console.log('------------------------🐢');
 
           const turtleRegExp2 = /(turtle(.*)?knocked\W*over\W*((the|a|that|)\W*)?candle\b)|(turtle(.*)?knocked\W*((the|a|that|)\W*)?candle\W*over\b)/i;
           const turtleMatch2 = comment.body.match(turtleRegExp2);
-          if (turtleMatch2 && !previouslySeenComments?.has(comment.id)) {
+          if (turtleMatch2 && !previouslySeenComments.has(comment.id)) {
             console.log(`🐢 [monitorSubreddits ${new Date().toLocaleString()}]: Found matching comment: "${comment.body}"`);
             
             // Take action - reply to the comment
@@ -261,7 +261,7 @@ function monitorComments() {
           const matchedKeywords = findMatchedKeywords('', comment.body);
           
           if (matchedKeywords.length > 0) {
-            console.log(`🐢 [monitorComments: ${new Date().toLocaleString()}]: Found matching comment: "${comment.body.substring(0, 50)}..." with keywords: ${matchedKeywords.join(', ')}`);
+            console.log(`🐢 [monitorComments: ${new Date().toLocaleString()}]: Found matching comment: "${comment.body.substring(0, 50)}" with keywords: ${matchedKeywords.join(', ')}`);
             
             // Only respond if we haven't seen this comment before
             if (!previouslySeenComments.has(comment.id)) {
@@ -293,13 +293,13 @@ function monitorComments() {
 async function respondToComment(comment, matchedKeywords) {
   // console.log(`🐢 comment:`, comment);
   try {
-    if (comment.body.match(/^hey(,|) crabman('|)s turtle\b$/i)) {
-      reply = `Hey Earl.`;
+    if (comment.body.match(/^hey(,|) crabman('|)s turtle(.|!|\?|)$/i)) {
+      let reply = `Hey Earl.`;
       console.log(`🐢 [respondToComment: ${new Date().toLocaleString()}]: Replied to comment by u/${comment.author.name}\n${reply}`);
       return comment.reply(reply);
     }
     if (comment.body.match(/good bot/i)) {
-      reply = 'Thanks! Got any arugula?';
+      let reply = 'Thanks! Got any arugula?';
       console.log(`🐢 [respondToComment: ${new Date().toLocaleString()}]: Replied to comment by u/${comment.author.name}\n${reply}`)
       return comment.reply(reply);
     }
