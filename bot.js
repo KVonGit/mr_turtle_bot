@@ -459,7 +459,7 @@ function setStartingPoint(season, episode) {
 }
 
 // Schedule weekly posts (e.g., every Monday at 9:00 AM)
-cron.schedule('29 19 * * 7', () => {
+cron.schedule('25 16 * * 2', () => {
   console.log('🐢 Running scheduled episode post...' + new Date().toLocaleString());
   postNextEpisode();
 });
