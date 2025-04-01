@@ -293,6 +293,17 @@ function monitorComments() {
 async function respondToComment(comment, matchedKeywords) {
   // console.log(`🐢 comment:`, comment);
   try {
+    if (comment.body.match(/^hey(,|) crabman('|)s turtle\b$/i)) {
+      reply = `Hey Earl.`;
+      console.log(`🐢 [respondToComment: ${new Date().toLocaleString()}]: Replied to comment by u/${comment.author.name}\n${reply}`);
+      return comment.reply(reply);
+    }
+    if (comment.body.match(/good bot/i)) {
+      reply = 'Thanks! Got any arugula?';
+      console.log(`🐢 [respondToComment: ${new Date().toLocaleString()}]: Replied to comment by u/${comment.author.name}\n${reply}`)
+      return comment.reply(reply);
+    }
+    
     // Customize reply based on the matched keywords
     let keywordMention = '';
     
@@ -305,16 +316,7 @@ async function respondToComment(comment, matchedKeywords) {
 
     let reply = `Hello! I noticed ${keywordMention}! Nice!`;
 
-    if (comment.body.match(/^hey(,|) crabman('|)s turtle\b$/i)) {
-      reply = `Hey Earl.`;
-      console.log(`🐢 [respondToComment: ${new Date().toLocaleString()}]: Replied to comment by u/${comment.author.name}\n${reply}`);
-      return comment.reply(reply);
-    }
-    if (comment.body.match(/good bot/i)) {
-      reply = 'Thanks! Got any arugula?';
-      console.log(`🐢 [respondToComment: ${new Date().toLocaleString()}]: Replied to comment by u/${comment.author.name}\n${reply}`)
-      return comment.reply(reply);
-    }
+    
     if (matchedKeywords === '20th' || matchedKeywords === 'twentieth' || matchedKeywords === 'anniversary') {
       reply = `Hello! I noticed ${keywordMention}! I'm Mr. Turtle, a bot that helps with our My Name Is Earl 20th anniversary discussion series!`;
     }
