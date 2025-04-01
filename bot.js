@@ -233,7 +233,7 @@ function monitorComments() {
         const commentCreated = comment.created_utc * 1000; // Convert to milliseconds
         
         // Only process comments created since our last check
-        // if (commentCreated > lastCommentCheckTime) {
+        if (commentCreated > lastCommentCheckTime) {
           
         console.log('🐢 comment.author.name:', comment.author.name);
         console.log('🐢 comment.id:', comment.id);
@@ -275,7 +275,7 @@ function monitorComments() {
               console.log(`🐢 Already processed comment ${comment.id}, skipping`);
             }
           }
-        // }
+        }
       }
       
       // Update the last check time
