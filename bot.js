@@ -419,7 +419,7 @@ async function postNextEpisode() {
     // Create the post
     const title = `Episode Discussion: ${nextEpisode.name} (S${nextEpisode.season}E${nextEpisode.number})`;
     const body = `
-📺 **My Name Is Earl - 20th Anniversary Rewatch**
+**My Name Is Earl - 20th Anniversary Rewatch**
 
 ## S${nextEpisode.season}E${nextEpisode.number}: ${nextEpisode.name}
 
