@@ -101,7 +101,7 @@ function monitorSubreddits() {
         if (postCreated > lastCheckTime) {
           // Find which keyword(s) matched
           const turtleRegExp = /(turtle(.*)?knocked\W*over\W*((the|a|that|)\W*)?candle\b)|(turtle(.*)?knocked\W*((the|a|that|)\W*)?candle\W*over\b)/i;
-          const turtleMatch = post.title.match(turtleRegExp);
+          const turtleMatch = post.title.match(turtleRegExp) || post.body.match(turtleRegExp));
           if (turtleMatch && !previouslySeenPosts.has(post.id)) {
             console.log(`🐢 [monitorSubreddits ${new Date().toLocaleString()}]: Found matching post: "${post.title}"`);
             
