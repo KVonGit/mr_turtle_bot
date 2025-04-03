@@ -101,14 +101,17 @@ function monitorSubreddits() {
         if (postCreated > lastCheckTime) {
           // Find which keyword(s) matched
           const turtleRegExp = /(turtle(.*)?knocked\W*over\W*((the|a|that|)\W*)?candle\b)|(turtle(.*)?knocked\W*((the|a|that|)\W*)?candle\W*over\b)/i;
-          const turtleMatch = post.title.match(turtleRegExp) || post.body.match(turtleRegExp));
+          const turtleMatchTitle = post.title.match(turtleRegExp);
+          const turtleMatchBody = post.selftext ? post.selftext.match(turtleRegExp) : null;
+          const turtleMatch = turtleMatchTitle || turtleMatchBody;
+
           if (turtleMatch && !previouslySeenPosts.has(post.id)) {
             console.log(`🐢 [monitorSubreddits ${new Date().toLocaleString()}]: Found matching post: "${post.title}"`);
             
             console.log(`🐢 [monitorSubreddits: ${new Date().toLocaleString()}]: Replied to post by u/${post.author.name}\nDodge definitely knocked over that candle.`);
-             // Mark as seen
-             previouslySeenPosts.add(post.id);
-             saveSeenContent(previouslySeenPosts, previouslySeenComments);
+            // Mark as seen
+            previouslySeenPosts.add(post.id);
+            saveSeenContent(previouslySeenPosts, previouslySeenComments);
             return post.reply(`Dodge definitely knocked over that candle.`);
           }
           const matchedKeywords = findMatchedKeywords(post.title, post.selftext);
