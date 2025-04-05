@@ -1,4 +1,4 @@
-# MrTurtleBot FAQ
+# Under the Shell
 
 ## What is MrTurtleBot?
 MrTurtleBot is a Reddit bot that helps facilitate the "My Name Is Earl" 20th anniversary rewatch series in r/MyNameIsEarlFans.
