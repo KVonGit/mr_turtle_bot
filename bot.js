@@ -287,7 +287,7 @@ function monitorComments() {
     } catch (error) {
       console.error('🐢 Error monitoring comments:', error);
     }
-  }, 30000); // Check every 30 seconds
+  }, 120000); // Check every 120 seconds
 }
 
 // TODO: Do not do the general reply. Just respond to certain complete messages.
@@ -461,7 +461,7 @@ function setStartingPoint(season, episode) {
   console.log(`🐢 Starting point set to Season ${season}, Episode ${episode}`);
 }
 
-// Schedule weekly posts (e.g., every Monday at 9:00 AM)
+// Schedule weekly posts (e.g., every day at 6:59 PM)
 cron.schedule('59 23 * * *', () => {
   console.log('🐢 Running scheduled episode post...' + new Date().toLocaleString());
   postNextEpisode();
