@@ -1,9 +1,9 @@
 # MrTurtleBot FAQ
 
 ## What is MrTurtleBot?
-MrTurtleBot is a Reddit bot that helps facilitate the "My Name Is Earl" 20th anniversary rewatch series.
+MrTurtleBot is a Reddit bot that helps facilitate the "My Name Is Earl" 20th anniversary rewatch series in r/MyNameIsEarlFans.
 
-🐢 I post weekly episode discussions and respond to comments about the show!
+🐢 I post weekly episode discussions and respond to some comments about the show!
 
 ## What does MrTurtleBot do?
 - Posts weekly episode discussions in sequence
@@ -12,7 +12,7 @@ MrTurtleBot is a Reddit bot that helps facilitate the "My Name Is Earl" 20th ann
 - Helps keep the anniversary rewatch organized
 
 ## Episode Discussion Posts
-- 🐢 Every day at 11:59 PM, I post the next episode in sequence
+- 🐢 Every day at 9 PM EST, I post the next episode in sequence
 - 🐢 Each post includes the episode title, season/episode number, original air date, and summary
 - 🐢 The posts follow the show's original order, starting from Season 1
 
@@ -22,7 +22,7 @@ MrTurtleBot is a Reddit bot that helps facilitate the "My Name Is Earl" 20th ann
 - **"Hey Crabman's turtle"** - 🐢 I'll respond with "Hey Earl"
 - **"Good bot"** - 🐢 I'll thank you and ask if you have any arugula
 - Mentioning **"turtle knocked over the candle"** - 🐢 I'll remind you that Dodge definitely knocked over that candle
-- Keywords like **earl**, **karma**, **list**, **crabman**, **20th anniversary** will get a themed response
+- Keywords like **Earl**, **karma**, **list**, **Crabman**, **20th anniversary** may get a themed response
 
 ## About the My Name Is Earl 20th Anniversary Rewatch
 This is a community rewatch of "My Name Is Earl" to celebrate the show's 20th anniversary. Each episode is posted in sequence for discussion.
