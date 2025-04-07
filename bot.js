@@ -215,7 +215,7 @@ function monitorComments() {
   // Track the last check time for comments
   let lastCommentCheckTime = Date.now();
   
-  // Poll for new comments every 30 seconds
+  // Poll for new comments every 120 seconds
   setInterval(async () => {
     console.log('🐢 ' + new Date().toLocaleString() + ': Checking for new comments...');
     try {
@@ -461,8 +461,9 @@ function setStartingPoint(season, episode) {
   console.log(`🐢 Starting point set to Season ${season}, Episode ${episode}`);
 }
 
-// Schedule weekly posts (e.g., every day at 6:59 PM)
-cron.schedule('59 23 * * *', () => {
+// Schedule weekly posts (e.g., every Monday at 18:59 UTC, which is 1:59 PM CST, and Manchester UK (BST) is 6 hrs ahead of Central Time)
+// Adjust the cron expression as needed for your timezone
+cron.schedule('59 18 * * 1', () => {
   console.log('🐢 Running scheduled episode post...' + new Date().toLocaleString());
   postNextEpisode();
 });

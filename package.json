@@ -5,7 +5,7 @@
     "snoowrap": "^1.23.0"
   },
   "name": "mr_turtle_bot",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "reddit bot",
   "main": "bot.js",
   "devDependencies": {},
