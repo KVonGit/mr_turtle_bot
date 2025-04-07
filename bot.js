@@ -476,7 +476,9 @@ console.log('🐢 ... MrTurtleBot is crawling!');
 
 // Start both monitoring functions
 monitorSubreddits();
-monitorComments();
+setTimeout(() => {
+  monitorComments();
+}, 10000);
 
 // Save seen content every 5 minutes
 setInterval(() => {
