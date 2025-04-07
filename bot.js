@@ -140,7 +140,7 @@ function monitorSubreddits() {
     } catch (error) {
       console.error('🐢 Error monitoring subreddits:', error);
     }
-  }, 30000); // Check every 30 seconds
+  }, 60000); // Check every 60 seconds
 }
 
 // New function to find all matched keywords
@@ -287,7 +287,7 @@ function monitorComments() {
     } catch (error) {
       console.error('🐢 Error monitoring comments:', error);
     }
-  }, 120000); // Check every 120 seconds
+  }, 60000); // Check every 60 seconds
 }
 
 // TODO: Do not do the general reply. Just respond to certain complete messages.
