@@ -140,7 +140,7 @@ function monitorSubreddits() {
     } catch (error) {
       console.error('🐢 Error monitoring subreddits:', error);
     }
-  }, 60000); // Check every 60 seconds
+  }, 59000); // Check every 59 seconds
 }
 
 // New function to find all matched keywords
@@ -287,7 +287,7 @@ function monitorComments() {
     } catch (error) {
       console.error('🐢 Error monitoring comments:', error);
     }
-  }, 60000); // Check every 60 seconds
+  }, 61000); // Check every 61 seconds
 }
 
 // TODO: Do not do the general reply. Just respond to certain complete messages.
@@ -461,7 +461,7 @@ function setStartingPoint(season, episode) {
   console.log(`🐢 Starting point set to Season ${season}, Episode ${episode}`);
 }
 
-// Schedule weekly posts (e.g., every Monday at 18:59 UTC, which is 1:59 PM CST, and Manchester UK (BST) is 6 hrs ahead of Central Time)
+// Schedule weekly posts (e.g., every Monday at 18:59 UTC, which is 1:59 PM CST, and 7:59 PM in Manchester UK)
 // Adjust the cron expression as needed for your timezone
 cron.schedule('59 18 * * 1', () => {
   console.log('🐢 Running scheduled episode post...' + new Date().toLocaleString());
